@@ -25,19 +25,23 @@ Route::group(['prefix' => 'vaccine'], function () {
         return response()->json([
             [
                 'name' => 'Vacina antirrábica',
-                'description' => 'Uma das principais vacinas de cachorros, ela imuniza o pet contra a raiva canina. Vacina com reforço anual.'
+                'description' => 'Uma das principais vacinas de cachorros, ela imuniza o pet contra a raiva canina. Vacina com reforço anual.',
+                'validity' => '',
             ],
             [
                 'name' => 'Vacina múltipla ou polivalente (V8 e V10)',
-                'description' => 'Imuniza o pet contra doenças de origem viral e bacteriana. São elas: cinomose, parvovirose, coronavirose, hepatite infecciosa canina, adenovirose, parainfluenza e até alguns tipos de leptospirose. Vacina com reforço anual.'
+                'description' => 'Imuniza o pet contra doenças de origem viral e bacteriana. São elas: cinomose, parvovirose, coronavirose, hepatite infecciosa canina, adenovirose, parainfluenza e até alguns tipos de leptospirose. Vacina com reforço anual.',
+                'validity' => '',
             ],
             [
                 'name' => 'Vacina contra a giardíase',
-                'description' => 'É considerada uma zoonose (doença transmitida entre animais e pessoas), um protozoário que é contraído principalmente em praias e parques por modo fecal-oral. Vacina com reforço anual.'
+                'description' => 'É considerada uma zoonose (doença transmitida entre animais e pessoas), um protozoário que é contraído principalmente em praias e parques por modo fecal-oral. Vacina com reforço anual.',
+                'validity' => '',
             ],
             [
                 'name' => 'Vacina contra a gripe canina',
-                'description' => 'Também conhecida como “tosse dos canis” ou traqueobronquite infecciosa canina (TIC). Vacina com reforço anual.'
+                'description' => 'Também conhecida como “tosse dos canis” ou traqueobronquite infecciosa canina (TIC). Vacina com reforço anual.',
+                'validity' => '',
             ]
         ]);
     });
