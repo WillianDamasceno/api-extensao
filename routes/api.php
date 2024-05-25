@@ -8,11 +8,11 @@ Route::get('/', function (Request $request) {
 });
 
 Route::group(['prefix' => 'vaccine'], function () {
-    Route::post('/cat', function (Request $request) {
+    Route::get('/cat', function (Request $request) {
         return response()->json('cat');
     });
 
-    Route::post('/dog', function (Request $request) {
+    Route::get('/dog', function (Request $request) {
         return response()->json('dog');
     });
 });
