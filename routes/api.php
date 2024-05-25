@@ -1,10 +1,94 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 Route::get('/', function (Request $request) {
     return response()->json(['message' => 'Hello World!']);
+});
+Route::group(['prefix' => 'auth'], function () {
+    Route::get('/register', function (Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return response()->json($user->id);
+    });
+
+    Route::get('/login', function (Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        if (!bcrypt($request->password) === $user->password) {
+            return response()->json(['message' => 'Invalid password'], 401);
+        }
+
+        return response()->json($user->id);
+    });
+
+    Route::get('/update', function () {
+        $user = User::find((int) request('id'));
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $validator = Validator::make(request()->all(), [
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users',
+            'password' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if (request('name')) {
+            $user->name = request('name');
+        }
+
+        if (request('email')) {
+            $user->email = request('email');
+        }
+
+        if (request('password')) {
+            $user->password = bcrypt(request('password'));
+        }
+
+        $user->save();
+
+        return response()->json($user->id);
+    });
+
+    Route::get('/delete', function () {
+        return response()->json(User::where('id', 1)->delete());
+    });
 });
 
 Route::group(['prefix' => 'vaccine'], function () {
