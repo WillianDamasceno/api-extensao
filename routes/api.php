@@ -86,6 +86,16 @@ Route::group(['prefix' => 'auth'], function () {
         return response()->json(['data' => $user->id]);
     });
 
+    Route::get('/get', function () {
+        $user = User::find((int) request('id'));
+
+        return response()->json([
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $user->password,
+        ]);
+    });
+
     Route::get('/delete', function () {
         return response()->json(['data' => User::where('id', (int) request('id'))->delete()]);
     });
