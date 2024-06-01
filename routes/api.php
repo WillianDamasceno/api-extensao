@@ -87,7 +87,7 @@ Route::group(['prefix' => 'auth'], function () {
     });
 
     Route::get('/delete', function () {
-        return response()->json(['data' => User::where('id', request('id'))->delete()]);
+        return response()->json(['data' => User::where('id', (int) request('id'))->delete()]);
     });
 });
 
