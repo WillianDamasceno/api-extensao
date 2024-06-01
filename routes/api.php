@@ -26,7 +26,7 @@ Route::group(['prefix' => 'auth'], function () {
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json($user->id);
+        return response()->json(['data' => $user->id]);
     });
 
     Route::get('/login', function (Request $request) {
@@ -49,7 +49,7 @@ Route::group(['prefix' => 'auth'], function () {
             return response()->json(['message' => 'Invalid password'], 401);
         }
 
-        return response()->json($user->id);
+        return response()->json(['data' => $user->id]);
     });
 
     Route::get('/update', function () {
@@ -83,11 +83,11 @@ Route::group(['prefix' => 'auth'], function () {
 
         $user->save();
 
-        return response()->json($user->id);
+        return response()->json(['data' => $user->id]);
     });
 
     Route::get('/delete', function () {
-        return response()->json(User::where('id', 1)->delete());
+        return response()->json(['data' => User::where('id', 1)->delete()]);
     });
 });
 
