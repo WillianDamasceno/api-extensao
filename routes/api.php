@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +99,91 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::get('/delete', function () {
         return response()->json(['data' => User::where('id', (int) request('id'))->delete()]);
+    });
+});
+
+Route::group(['prefix' => 'pet'], function () {
+    Route::get('create', function () {
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required|string',
+            'born' => 'required|string',
+            'type' => 'required|string',
+            'vaccines' => 'required|string',
+            'user_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => true]);
+        }
+
+        $pet = Pet::create([
+            'name' => request('name'),
+            'born' => request('born'),
+            'type' => request('type'),
+            'vaccines' => request('vaccines'),
+            'user_id' => request('user_id'),
+        ]);
+
+        return response()->json(['data' => $pet->id]);
+    });
+
+    Route::get('/update', function () {
+        $pet = Pet::find((int) request('id'));
+
+        if (!$pet) {
+            return response()->json(['error' => true], 404);
+        }
+
+        $validator = Validator::make(request()->all(), [
+            'name' => 'nullable|string',
+            'born' => 'nullable|string',
+            'type' => 'nullable|string',
+            'vaccines' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if (request('name')) {
+            $pet->name = request('name');
+        }
+
+        if (request('born')) {
+            $pet->born = request('born');
+        }
+
+        if (request('type')) {
+            $pet->type = request('type');
+        }
+
+        if (request('vaccines')) {
+            $pet->vaccines = request('vaccines');
+        }
+
+        $pet->save();
+
+        return response()->json(['data' => $pet->id]);
+    });
+
+    Route::get('delete', function () {
+        return response()->json(['data' => Pet::where('id', (int) request('id'))->delete()]);
+    });
+
+    Route::get('get', function () {
+        $pet = Pet::find((int) request('id'));
+
+        return response()->json([
+            'name' => $pet->name,
+            'born' => $pet->born,
+            'type' => $pet->type,
+            'vaccines' => $pet->vaccines,
+            'user_id' => $pet->user_id,
+        ]);
+    });
+
+    Route::get('/get-all-user-pets', function () {
+        return response()->json(User::find((int) request('user_id'))->pets);
     });
 });
 
