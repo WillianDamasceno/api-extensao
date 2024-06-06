@@ -6,48 +6,49 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
-Route::get('/', function (Request $request) {
+Route::get('/', function () {
     return response()->json(['message' => 'Hello World!']);
 });
+
 Route::group(['prefix' => 'auth'], function () {
-    Route::get('/register', function (Request $request) {
-        $validator = Validator::make($request->all(), [
+    Route::get('/register', function () {
+        $validator = Validator::make(request()->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['error' => true], 422);
         }
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'name' => request('name'),
+            'email' => request('email'),
+            'password' => bcrypt(request('password')),
         ]);
 
         return response()->json(['data' => $user->id]);
     });
 
-    Route::get('/login', function (Request $request) {
-        $validator = Validator::make($request->all(), [
+    Route::get('/login', function () {
+        $validator = Validator::make(request()->all(), [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['error' => true], 422);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', request('email'))->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['error' => true], 404);
         }
 
-        if (!bcrypt($request->password) === $user->password) {
-            return response()->json(['message' => 'Invalid password'], 401);
+        if (!bcrypt(request('password')) === $user->password) {
+            return response()->json(['error' => true], 401);
         }
 
         return response()->json(['data' => $user->id]);
@@ -57,7 +58,7 @@ Route::group(['prefix' => 'auth'], function () {
         $user = User::find((int) request('id'));
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['error' => true], 404);
         }
 
         $validator = Validator::make(request()->all(), [
@@ -67,7 +68,7 @@ Route::group(['prefix' => 'auth'], function () {
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['error' => true], 422);
         }
 
         if (request('name')) {
@@ -93,12 +94,12 @@ Route::group(['prefix' => 'auth'], function () {
         return response()->json([
             'name' => $user->name,
             'email' => $user->email,
-            'password' => $user->password,
         ]);
     });
 
     Route::get('/delete', function () {
-        return response()->json(['data' => User::where('id', (int) request('id'))->delete()]);
+        User::where('id', (int) request('id'))->delete();
+        return response()->json(['data' => true]);
     });
 });
 
@@ -108,8 +109,8 @@ Route::group(['prefix' => 'pet'], function () {
             'name' => 'required|string',
             'born' => 'required|string',
             'type' => 'required|string',
-            'vaccines' => 'required|string',
             'user_id' => 'required|integer',
+            'vaccines' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -142,7 +143,7 @@ Route::group(['prefix' => 'pet'], function () {
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['error' => true], 422);
         }
 
         if (request('name')) {
@@ -167,7 +168,8 @@ Route::group(['prefix' => 'pet'], function () {
     });
 
     Route::get('delete', function () {
-        return response()->json(['data' => Pet::where('id', (int) request('id'))->delete()]);
+        Pet::where('id', (int) request('id'))->delete();
+        return response()->json(['data' => true]);
     });
 
     Route::get('get', function () {
@@ -182,7 +184,7 @@ Route::group(['prefix' => 'pet'], function () {
         ]);
     });
 
-    Route::get('/get-all-user-pets', function () {
+    Route::get('/get-user-pets', function () {
         return response()->json(User::find((int) request('user_id'))->pets);
     });
 });
@@ -203,7 +205,7 @@ Route::group(['prefix' => 'vaccine'], function () {
         ]);
     });
 
-    Route::get('/dog', function (Request $request) {
+    Route::get('/dog', function () {
         return response()->json([
             [
                 'name' => 'Vacina antirrábica',
