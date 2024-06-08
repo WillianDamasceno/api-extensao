@@ -36,7 +36,7 @@ Route::group(['prefix' => 'auth'], function () {
             'password' => bcrypt(request('password')),
         ]);
 
-        return response()->json(['data' => $user->id]);
+        return response()->json(['data' => "$user->id"]);
     });
 
     Route::get('/login', function () {
@@ -59,7 +59,7 @@ Route::group(['prefix' => 'auth'], function () {
             return response()->json(['error' => true], 401);
         }
 
-        return response()->json(['data' => $user->id]);
+        return response()->json(['data' => "$user->id"]);
     });
 
     Route::get('/update', function () {
