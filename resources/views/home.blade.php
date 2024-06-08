@@ -9,13 +9,17 @@
           <div>{{ $user->email }}</div>
         </div>
 
-        <button popovertarget="popover-{{ $user->id }}" class="hover:text-primary">Ver pets</button>
+        <button popovertarget="popover-{{ $user->id }}" class="btn rounded text-blue-500">
+          Ver pets
+        </button>
+
         <div id="popover-{{ $user->id }}" popover
-          class="w-[min(100vw-2rem,600px)] rounded-xl bg-zinc-100 p-12 shadow"
+          class="fixed bottom-auto top-20 max-h-[70vh] w-[min(100vw-2rem,600px)] flex-col gap-4 rounded-xl bg-zinc-100 p-8 shadow backdrop:bg-black/20 open:flex"
         >
+          <h2 class="pb-4 text-lg font-bold">Dados do pet</h2>
+
           @foreach ($user->pets as $pet)
-            <div class="flex flex-col justify-between">
-              <h2 class="text-lg font-bold">Dados do pet</h2>
+            <div class="flex flex-col justify-between rounded border p-4">
               <div>Nome: {{ $pet->name }}</div>
               <div>Nascimento: {{ $pet->born }}</div>
               <div>Tipo: {{ $pet->type }}</div>
