@@ -3,7 +3,7 @@
 @section('content')
   <main class="container grid grid-cols-1 gap-4 p-8">
     @foreach ($users as $user)
-      <article class="relative flex justify-between rounded-md bg-base-200/50 px-8 py-4 shadow">
+      <article class="relative flex justify-between rounded-md bg-zinc-100 px-8 py-4 shadow">
         <div>
           <div>{{ $user->name }}</div>
           <div>{{ $user->email }}</div>
@@ -11,7 +11,7 @@
 
         <button popovertarget="popover-{{ $user->id }}" class="hover:text-primary">Ver pets</button>
         <div id="popover-{{ $user->id }}" popover
-          class="w-[min(100vw-2rem,600px)] rounded-xl bg-base-200/50 p-12 shadow"
+          class="w-[min(100vw-2rem,600px)] rounded-xl bg-zinc-100 p-12 shadow"
         >
           @foreach ($user->pets as $pet)
             <div class="flex flex-col justify-between">
