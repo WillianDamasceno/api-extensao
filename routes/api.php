@@ -12,10 +12,18 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'auth'], function () {
     Route::get('/register', function () {
+        $emailValidator = Validator::make(request()->all(), [
+            'email' => 'required|string|max:255|unique:users',
+        ]);
+
+        if ($emailValidator->fails()) {
+            return response()->json(['data' => 'unique'], 200);
+        }
+
         $validator = Validator::make(request()->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'email' => 'required|string|max:255|unique:users',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -33,8 +41,8 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::get('/login', function () {
         $validator = Validator::make(request()->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
+            'email' => 'required|string|max:255',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
