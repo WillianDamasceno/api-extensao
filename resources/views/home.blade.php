@@ -29,12 +29,18 @@
                   <div>
                     @foreach ($vaccines as $vaccine)
                       @php
-                        [$name, $date] = explode('-', $vaccine);
+                        $explored = explode('-', $vaccine);
                       @endphp
-                      <div class="flex items-center">
-                        <div class="mr-2">{{ $name }}</div>
-                        <div>{{ $date }}</div>
-                      </div>
+
+                      @if (count($explored) > 1)
+                        @php
+                          [$name, $date] = $explored;
+                        @endphp
+                        <div class="flex items-center">
+                          <div class="mr-2">{{ $name }}</div>
+                          <div>{{ $date }}</div>
+                        </div>
+                      @endif
                     @endforeach
                   </div>
                 @endif
