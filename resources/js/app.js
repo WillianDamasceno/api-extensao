@@ -1,1 +1,2 @@
-import './bootstrap';
+// Configs for vite
+import.meta.glob(["../images/**"]);
