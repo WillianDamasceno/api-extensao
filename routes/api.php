@@ -185,7 +185,12 @@ Route::group(['prefix' => 'pet'], function () {
     });
 
     Route::get('/get-user-pets', function () {
-        return response()->json(User::find((int) request('user_id'))->pets);
+        return response()->json(
+            User::find((int) request('user_id'))
+                ->pets()
+                ->orderBy('id', 'desc')
+                ->get()
+        );
     });
 });
 
