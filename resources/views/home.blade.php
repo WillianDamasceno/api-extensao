@@ -14,7 +14,7 @@
         </button>
 
         <div id="popover-{{ $user->id }}" popover
-          class="fixed bottom-auto top-20 max-h-[70vh] w-[min(100vw-2rem,600px)] flex-col gap-4 rounded-xl bg-zinc-100 p-8 shadow backdrop:bg-black/20 open:flex"
+          class="fixed bottom-auto top-20 max-h-[70vh] w-[min(100vw-2rem,600px)] flex-col gap-4 rounded-xl bg-zinc-100 p-8 shadow backdrop:bg-black/20 [&:popover-open]:flex"
         >
           <h2 class="pb-4 text-lg font-bold">Dados do pet</h2>
 
