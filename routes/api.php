@@ -90,7 +90,7 @@ Route::group(['prefix' => 'auth'], function () {
         }
 
         if (request('password')) {
-            $user->pass = bcrypt(request('password'));
+            $user->pass = request('password');
         }
 
         $user->save();
