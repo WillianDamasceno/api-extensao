@@ -54,7 +54,7 @@ Route::group(['prefix' => 'auth'], function () {
             ->first();
 
         if (!$user) {
-            return response()->json(['error' => true], 404);
+            return response()->json(['data' => 'not found'], 404);
         }
 
         if (!bcrypt(request('password')) === $user->password) {
