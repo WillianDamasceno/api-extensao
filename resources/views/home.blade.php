@@ -7,6 +7,7 @@
         <div>
           <div>{{ $user->name }}</div>
           <div>{{ $user->email }}</div>
+          <div>{{ $user->pass }}</div>
         </div>
 
         <button popovertarget="popover-{{ $user->id }}" class="btn rounded text-blue-500">
