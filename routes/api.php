@@ -33,7 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
         $user = User::create([
             'name' => request('name'),
             'email' => request('email'),
-            'password' => bcrypt(request('password')),
+            'pass' => request('password'),
         ]);
 
         return response()->json(['data' => "$user->id"]);
@@ -50,14 +50,14 @@ Route::group(['prefix' => 'auth'], function () {
         }
 
         $user = User::where('email', request('email'))
-            ->where('password', bcrypt(request('password')))
+            ->where('pass', request('password'))
             ->first();
 
         if (!$user) {
             return response()->json(['data' => 'not found'], 404);
         }
 
-        if (!bcrypt(request('password')) === $user->password) {
+        if (!request('password') === $user->pass) {
             return response()->json(['error' => true], 401);
         }
 
@@ -90,7 +90,7 @@ Route::group(['prefix' => 'auth'], function () {
         }
 
         if (request('password')) {
-            $user->password = bcrypt(request('password'));
+            $user->pass = bcrypt(request('password'));
         }
 
         $user->save();
