@@ -49,7 +49,9 @@ Route::group(['prefix' => 'auth'], function () {
             return response()->json(['error' => true], 422);
         }
 
-        $user = User::where('email', request('email'))->first();
+        $user = User::where('email', request('email'))
+            ->where('password', bcrypt(request('password')))
+            ->first();
 
         if (!$user) {
             return response()->json(['error' => true], 404);
